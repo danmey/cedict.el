@@ -11,6 +11,10 @@
   "Face for word in chinese traditional script."
   :version "23.1")
 
+(defface cedict-chinese-pinyin-face
+  '((t (:inherit font-lock-function-name-face)))
+  "Face for word in chinese traditional script."
+  :version "23.1")
 
 ;(setq cedict-dictionary nil)
 
@@ -33,7 +37,25 @@
 (defun cedict-format-zh (zh-simplified zh-traditional)
   (lexical-let ((zh-s (propertize zh-simplified 'face 'cedict-chinese-traditional-face))
 		(zh-t (propertize zh-traditional 'face 'cedict-chinese-simplified-face)))
-    (insert (format "%s %s\n" zh-s zh-t))))
+    (insert (format "%s %s\t" zh-s zh-t)))
+  )
+
+		
+(defun cedict-format-py (py)
+  (insert (format "%s\n" (propertize py 'face 'cedict-chinese-pinyin-face))))
+ 
+(defun cedict-format-en (en-list)
+  (dolist (en en-list)
+    (insert (format "\t%s\n" en))))
+
+(defun cedict-format-chinese (entry)
+  (lexical-let ((zh (car entry))
+		(py (caadr entry))
+		(en (caddr entry)))
+    (cedict-format-zh (car zh) (cadr zh))
+    (cedict-format-py py)
+    (cedict-format-en en)))
+    
    
 (defun cedict-insert-entry (zh)
   (cedict-format-zh (car zh) (cadr zh)))
@@ -63,7 +85,7 @@
 				  (fl (length first))
 				  (sl (length second)))
 			     (> (+ sl sp) (+ fl fp)))))))
-      (dolist (entry sorted-entries) (cedict-insert-entry (caadr entry)))
+      (dolist (entry sorted-entries) (cedict-format-chinese (cadr entry)))
       (goto-char (point-min))
       (pop-to-buffer b))))
 
