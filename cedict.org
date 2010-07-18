@@ -1,0 +1,6 @@
+* DONE Prepare Perl script to transform CEDICT to ELisp
+* DONE Simple interactive lookup
+* TODO Changing input method
+* TODO Formatted view of the meaning
+* TODO Lookup around a word
+* TODO Menu based on a help mode
