@@ -23,11 +23,25 @@
 
 (defun cedict-search (&optional word-name)
   (interactive "sSearch for: ")
-  (dolist (entry cedict-dictionary)
-    (let ((en-words-cur (caddr entry)))
-      (dolist (word en-words-cur)
-	(if (string-match word-name word)
-	    (message word))))))
+  (lexical-let ((b (get-buffer-create "*cedict*"))
+		(found-words ()))
+    (set-buffer b)
+    (delete-region (point-min) (point-max))
+    (dolist (entry cedict-dictionary)
+      (let ((en-words-cur (caddr entry)))
+	(dolist (word en-words-cur)
+	  (if (string-match word-name word)
+	      (push word found-words)
+	    ))))
+    (lexical-let ((sorted-words (sort found-words (lambda (first second) (let ((fp (string-match word-name first))
+     						   (sp (string-match word-name second))
+     						   (fl (length first))
+     						   (sl (length second)))
+     					       (> (+ sl sp) (+ fl fp)))))))
+      (dolist (word sorted-words) (insert (format "%s\n" word)))
+    (pop-to-buffer b))))
+
+
 
 	  
 						
