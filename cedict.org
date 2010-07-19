@@ -4,3 +4,7 @@
 * TODO Formatted view of the meaning
 * TODO Lookup around a word
 * TODO Menu based on a help mode
+
+* Search
+** TODO Sort by order occuring in the meanings
+** TODO Limit to keywords
